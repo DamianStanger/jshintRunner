@@ -80,16 +80,16 @@
     dirContents = fs.readdirSync(directory);
 
     dirContents.forEach(function(file) {
-      if(file === '.jshintrc') {
+      if(file.toLowerCase() === '.jshintrc' || file.toLowerCase() === 'jshint.json') {
         var fullPath = path.join(directory, file);
         var jsonString = fs.readFileSync(fullPath, 'utf8');
         try {
-          //console.log("getting config from " + fullPath);
+//          console.log("getting config from " + fullPath);
           config = JSON.parse(jsonString);
         }
         catch(e) {
           config = undefined;
-          console.log("\n*** .jshint file must be valid JSON keys and values must be strings (enclosed in quotes) - processing file: " + fullPath + "\n");
+          console.log("\n*** Error- config file must be valid JSON, keys must be strings (enclosed in quotes), with no comments - whilst processing file: " + fullPath + "\n" + e + "\n\n");
         }
       }
     });
