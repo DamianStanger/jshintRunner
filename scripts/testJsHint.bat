@@ -1,1 +1,1 @@
-node scripts\jsHintRunner.js app.js ..\..relativeDirectory c:\code\absoluteDirectory ..\routes\absoluteFile.js
+node src\jsHintRunner.js app.js ..\..relativeDirectory c:\code\absoluteDirectory ..\routes\absoluteFile.js

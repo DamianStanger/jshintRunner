@@ -1,11 +1,34 @@
 {
   "name": "jsHintRunner",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "author": {
+    "author": "Damian Stanger",
+    "email": "damian.r.stanger+jslintrunner@gmail.com",
+    "url": "http://foldingair.blogspot.com"
+  },
   "private": true,
+  "license": "BSD",
+  "description": "run the node module jshint recursively on a number of directories and files",
+  "readmeFilename": "README.md",
+  "main": "./src/jsHintRunner.js",
+  "preferGlobal": true,
+  "keywords": [
+    "jshint",
+    "jslint",
+    "code quality"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DamianStanger/jshintRunner.git"
+  },
   "scripts": {
-    "start": "node jsHintRunner"
+    "inspectSelf": "node ./src/jsHintRunner.js ."
+  },
+  "bin": {
+    "jshintRunner": "./bin/jshintRunner"
   },
   "dependencies": {
     "jshint": "*"
-  }
+  },
+  "devDependencies": {}
 }
