@@ -3,16 +3,18 @@
 
   var fs = require("fs"),
     path = require("path"),
-    jshint = require("jshint").JSHINT,
-    allHintStats = [];
+    jshint = require("jshint").JSHINT;
 
-  var args = process.argv;
-  args.shift();
-  args.shift();
+  function getCommandArguments() {
+    var args = process.argv;
+    args.shift();
+    args.shift();
 
-  console.log("Running JsHint on all the *.js files in the following:");
-  console.log(args);
-  console.log();
+    console.log("Running JsHint on all the *.js files in the following:");
+    console.log(args);
+    console.log();
+    return args;
+  }
 
   function processFile(file, config) {
     if (/\.(js|json|jshintrc)$/.test(file)) {
@@ -61,22 +63,33 @@
     return hintStats;
   }
 
-  function getConfig(directory) {
+  function getParentDirectory(resolvedDirectory) {
+    return path.join(resolvedDirectory + "\\..");
+  }
+
+  function getJshintConfig(directory) {
     var config,
       resolvedDirectory,
-      dirContents = fs.readdirSync(directory);
+      dirContents,
+      dirStats = fs.statSync(directory);
+
+    if(!dirStats.isDirectory()){
+      return getJshintConfig(path.dirname(directory));
+    }
+
+    dirContents = fs.readdirSync(directory);
 
     dirContents.forEach(function(file) {
       if(file === '.jshintrc') {
         var fullPath = path.join(directory, file);
         var jsonString = fs.readFileSync(fullPath, 'utf8');
         try {
-          console.log("getting config from " + fullPath);
+          //console.log("getting config from " + fullPath);
           config = JSON.parse(jsonString);
         }
         catch(e) {
           config = undefined;
-          console.log("*** .jshint must be valid JSON keys and values must be strings (enclosed in quotes)")
+          console.log("\n*** .jshint file must be valid JSON keys and values must be strings (enclosed in quotes) - processing file: " + fullPath + "\n");
         }
       }
     });
@@ -87,29 +100,37 @@
     if(directory === resolvedDirectory) {
       return {};
     }
-    return getConfig(path.join(resolvedDirectory + "\\.."));
+
+    return getJshintConfig(getParentDirectory(resolvedDirectory));
   }
 
-  args.forEach(function(file) {
-    var config = getConfig(file);
-    console.log("Using configuration:");
-    console.log(config);
+  function run() {
+    var allHintStats = [],
+      args = getCommandArguments();
+
+    args.forEach(function (file) {
+      var config = getJshintConfig(file);
+      //console.log(config);
+      //console.log();
+      allHintStats = allHintStats.concat(iterateDir(file, config));
+    });
+
+    var failedHints = allHintStats.filter(function (x) {
+      return !x.success;
+    });
+
     console.log();
-    allHintStats = allHintStats.concat(iterateDir(file, config));
-  });
-
-  var failedHints = allHintStats.filter(function (x) {
-    return !x.success;
-  });
-
-  console.log();
-  console.log(failedHints.length + " of " + allHintStats.length + " files failed jshint");
-  console.log();
-
-  failedHints.forEach(function(hint) {
-    console.log("++++ " + hint.file + " ++++");
-    console.log(hint.errors);
+    console.log(failedHints.length + " of " + allHintStats.length + " files failed jshint");
     console.log();
-  });
+
+    failedHints.forEach(function (hint) {
+      console.log("++++ " + hint.file + " ++++");
+      console.log(hint.errors);
+      console.log();
+    });
+  }
+
+
+run();
 
 })();
