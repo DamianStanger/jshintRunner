@@ -5,9 +5,16 @@ jshintRunner is a module to recursively run the node module jshint recursively o
 ##Usage and examples
 
 ###Option 1
-configure and run the batch file in the scripts folder
+install globally with npm install -g jshintrunner
+run with jshintRunner directory1 directory2 directory-n file1 file2 file-n
+you can run against any number of directories and/or files
 
 ###Option 2
+installed locally
+configure and run the batch file in the scripts folder
+
+###Option 3
+installed locally
 ```node src/jshintRunner.js pathToDirectory```
 
 this will run jshint on all the javascript files in the target directory
