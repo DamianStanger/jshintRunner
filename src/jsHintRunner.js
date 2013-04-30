@@ -10,10 +10,15 @@
     args.shift();
     args.shift();
 
-    console.log("Running JsHint on all the *.js files in the following:");
-    console.log(args);
-    console.log();
-    return args;
+    if(args.length < 1) {
+      console.log("Usage: jshintRunner directory1 directory2 ... directory-n file1.js file2.js ... file-n.js");
+      return [];
+    } else {
+      console.log("Running JsHint on all the *.js files in the following:");
+      console.log(args);
+      console.log();
+      return args;
+    }
   }
 
   function processFile(file, config) {
@@ -64,7 +69,7 @@
   }
 
   function getParentDirectory(resolvedDirectory) {
-    return path.join(resolvedDirectory + "\\..");
+    return resolvedDirectory + path.sep + "..";
   }
 
   function getJshintConfig(directory) {

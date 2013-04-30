@@ -1,12 +1,11 @@
 {
-  "name": "jsHintRunner",
+  "name": "jshintrunner",
   "version": "0.1.0",
   "author": {
     "author": "Damian Stanger",
     "email": "damian.r.stanger+jslintrunner@gmail.com",
     "url": "http://foldingair.blogspot.com"
   },
-  "private": true,
   "license": "BSD",
   "description": "run the node module jshint recursively on a number of directories and files",
   "readmeFilename": "README.md",
