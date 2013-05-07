@@ -39,7 +39,7 @@ function Configurator(fs, path) {
         var fullPath = path.join(directory, file);
         var jsonString = fs.readFileSync(fullPath, 'utf8');
         try {
-          console.log("getting config from " + fullPath);
+          //console.log("getting config from " + fullPath);
           config = JSON.parse(jsonString);
         }
         catch(e) {

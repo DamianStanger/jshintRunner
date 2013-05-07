@@ -1,4 +1,4 @@
-/*global describe, it, require*/
+/*global describe, it, require, beforeEach*/
 "use strict";
 
 var fs = require("fs"),
