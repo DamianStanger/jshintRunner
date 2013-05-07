@@ -14,5 +14,5 @@
   "unused" : true,
   "strict" : true,
   "node" : true,
-  "predef" : [ "angular"]
+  "predef" : [ "angular", "describe", "it"]
 }

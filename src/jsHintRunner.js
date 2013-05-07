@@ -3,7 +3,8 @@
 
   var fs = require("fs"),
     path = require("path"),
-    jshint = require("jshint").JSHINT;
+    jshint = require("jshint").JSHINT,
+    Configurator = require("../src/Configurator");
 
   function getCommandArguments() {
     var args = process.argv;
@@ -65,56 +66,16 @@
         hintStats.push(hintStat);
       }
     }
-    return hintStats;
-  }
-
-  function getParentDirectory(resolvedDirectory) {
-    return resolvedDirectory + path.sep + "..";
-  }
-
-  function getJshintConfig(directory) {
-    var config,
-      resolvedDirectory,
-      dirContents,
-      dirStats = fs.statSync(directory);
-
-    if(!dirStats.isDirectory()){
-      return getJshintConfig(path.dirname(directory));
-    }
-
-    dirContents = fs.readdirSync(directory);
-
-    dirContents.forEach(function(file) {
-      if(file.toLowerCase() === '.jshintrc' || file.toLowerCase() === 'jshint.json') {
-        var fullPath = path.join(directory, file);
-        var jsonString = fs.readFileSync(fullPath, 'utf8');
-        try {
-//          console.log("getting config from " + fullPath);
-          config = JSON.parse(jsonString);
-        }
-        catch(e) {
-          config = undefined;
-          console.log("\n*** Error- config file must be valid JSON, keys must be strings (enclosed in quotes), with no comments - whilst processing file: " + fullPath + "\n" + e + "\n\n");
-        }
-      }
-    });
-
-    if(config){ return config;}
-
-    resolvedDirectory = path.resolve(directory);
-    if(directory === resolvedDirectory) {
-      return {};
-    }
-
-    return getJshintConfig(getParentDirectory(resolvedDirectory));
+    return hintStats;`
   }
 
   function run() {
     var allHintStats = [],
-      args = getCommandArguments();
+      args = getCommandArguments(),
+      configurator = new Configurator(fs, path);
 
     args.forEach(function (file) {
-      var config = getJshintConfig(file);
+      var config = configurator.getJshintConfig(file);
       //console.log(config);
       //console.log();
       allHintStats = allHintStats.concat(iterateDir(file, config));
