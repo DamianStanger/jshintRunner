@@ -66,7 +66,7 @@
         hintStats.push(hintStat);
       }
     }
-    return hintStats;`
+    return hintStats;
   }
 
   function run() {
